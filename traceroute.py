@@ -9,20 +9,20 @@ outfile = ScamperFile(WARTS_OUT, "w")
 df = pd.read_csv('v4_is_vpn_v6_is_same_org_as_v4_50rows.csv')[:10]
 
 with ScamperCtrl(mux='/run/ark/mux', outfile=outfile) as ctrl:
-# print(vps, end='\n')
-vps = [vp for vp in ctrl.vps() if 'network:ipv6' in vp.tags][:3]
-ctrl.add_vps(vps)
+    # print(vps, end='\n')
+    vps = [vp for vp in ctrl.vps() if 'network:ipv6' in vp.tags][:3]
+    ctrl.add_vps(vps)
 
-for ctrl_index, i in enumerate(ctrl.instances()):
-    for index, (ipv4, ipv6) in enumerate(zip(df['IPv4'], df['IPv6'])):
-    ipv4, ipv6 = str(ipv4), str(ipv6)
-    id = ctrl_index * 10 + index
-    print(ipv4, ipv6, id)
-    ctrl.do_trace(ipv4, inst = i, method='icmp-paris', attempts=1, wait_timeout=timedelta(seconds=1), userid = id)
-    ctrl.do_trace(ipv6, inst= i, method='icmp-paris', attempts=1, wait_timeout=timedelta(seconds=1), userid = id)
+    for ctrl_index, i in enumerate(ctrl.instances()):
+        for index, (ipv4, ipv6) in enumerate(zip(df['IPv4'], df['IPv6'])):
+            ipv4, ipv6 = str(ipv4), str(ipv6)
+            id = ctrl_index * 10 + index
+            print(ipv4, ipv6, id)
+            ctrl.do_trace(ipv4, inst = i, method='icmp-paris', attempts=1, wait_timeout=timedelta(seconds=1), userid = id)
+            ctrl.do_trace(ipv6, inst= i, method='icmp-paris', attempts=1, wait_timeout=timedelta(seconds=1), userid = id)
 
-for obj in ctrl.responses(timeout=timedelta(seconds=100)):
-    if not isinstance(obj, ScamperTrace):
-    continue
+    for obj in ctrl.responses(timeout=timedelta(seconds=100)):
+        if not isinstance(obj, ScamperTrace):
+            continue
 
 
