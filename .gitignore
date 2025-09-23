@@ -2,3 +2,4 @@ data/*
 split_data/*
 
 .venv
+*.gz
