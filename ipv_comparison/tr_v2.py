@@ -29,6 +29,9 @@ with ScamperCtrl(mux='/run/ark/mux', outfile=output_file) as ctrl:
     # Vantage Point Selection
     vps = [vp for vp in ctrl.vps() if vp.cc in ('US', 'CA', 'BR', 'IN', 'ES', 'AU')]
 
+    # Select VPs that have BOTH IPv4 and IPv6 connectivity
+    vps = [vp for vp in vps if 'network:ipv4' in vp.tags and 'network:ipv6' in vp.tags]
+
     # Filter Vantage Points
     country_counts = defaultdict(int)
     limited_vps = []
@@ -62,6 +65,9 @@ with ScamperCtrl(mux='/run/ark/mux', outfile=output_file) as ctrl:
 
         # Process the traceroute result
         trace = obj
+        inst = trace.inst
+
+        userid = trace.userid
         src = trace.src
         dst = trace.dst
         stop = trace.stop_reason_str
