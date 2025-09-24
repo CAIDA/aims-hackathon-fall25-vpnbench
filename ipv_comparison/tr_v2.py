@@ -16,7 +16,10 @@ output_fpath = "./foo.warts.gz"
 output_file = ScamperFile(output_fpath, "w")
 
 # Inputs
-input_fpath = "../data/v4_is_vpn_v6_is_same_org_as_v4_50rows.csv"
+script_dir = os.path.dirname(os.path.abspath(__file__))
+data_path = os.path.join(script_dir, '..', 'data', 'v4_is_vpn_v6_is_same_org_as_v4_50rows.csv')
+
+input_fpath = data_path
 df = pd.read_csv(input_fpath)
 print(f"Input file rows: {len(df)}")
 print(f"Unique (IPv4, IPv6): {len(df.drop_duplicates(subset=['IPv4', 'IPv6']))}")
