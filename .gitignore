@@ -3,3 +3,5 @@ split_data/*
 
 .venv
 *.warts.gz
+*.log
+*.txt
