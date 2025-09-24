@@ -66,18 +66,22 @@ with ScamperCtrl(mux='/run/ark/mux', outfile=output_file) as ctrl:
         # Process the traceroute result
         trace = obj
         inst = trace.inst
-
+        inst_name = inst.name
+        inst_ipv4 = inst.ipv4
+        inst_loc = inst.loc
+        inst_cc = inst.cc
+        
         userid = trace.userid
         src = trace.src
         dst = trace.dst
         stop = trace.stop_reason_str
 
-        print(f"traceroute from {src} to {dst}: stopped due to {stop}")
+        print(f"{inst_name}, {inst_cc}, {inst_ipv4}, {inst_loc}, {userid}, {src}, {dst}, {stop}")
 
         # Print each hop in the traceroute
         for hop in trace.hops():
             if hop is None:
-                print(f"No hops")
+                print(f"*")
             else:
                 if hop.src:
                     hop_num = hop.probe_ttl
