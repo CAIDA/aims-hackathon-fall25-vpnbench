@@ -2,4 +2,4 @@ data/*
 split_data/*
 
 .venv
-*.gz
+*.warts.gz
