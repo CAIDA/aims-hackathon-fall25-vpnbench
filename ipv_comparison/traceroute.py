@@ -31,9 +31,28 @@ with ScamperCtrl(mux='/run/ark/mux', outfile=outfile) as ctrl:
             ipv4, ipv6 = str(ipv4), str(ipv6)
             id = inst_index * df.shape[0] + ip_index
             print(f"{id:4} {ipv4:15} {ipv6:30}")
-            ctrl.do_trace(ipv4, inst = ctrl_inst, method='icmp-paris', attempts=1, wait_timeout=timedelta(seconds=1), userid = id)
-            ctrl.do_trace(ipv6, inst= ctrl_inst, method='icmp-paris', attempts=1, wait_timeout=timedelta(seconds=1), userid = id)
+            ctrl.do_trace(ipv4, inst=ctrl_inst, method='icmp-paris', attempts=1, wait_timeout=timedelta(seconds=1), userid = id)
+            ctrl.do_trace(ipv6, inst=ctrl_inst, method='icmp-paris', attempts=1, wait_timeout=timedelta(seconds=1), userid = id)
+
+    print("\n--------------------------------\n")
 
     for obj in ctrl.responses(timeout=timedelta(seconds=100)):
         if not isinstance(obj, ScamperTrace):
             continue
+        
+        # Process the traceroute result
+        trace = obj
+        src = trace.src
+        dst = trace.dst
+        
+        print(f"traceroute from {src} to {dst}")
+        
+        # Print each hop in the traceroute
+        for hop in trace.hops():
+            hop_num = hop.probe_ttl
+            if hop.addr:
+                print(f"{hop_num:2}  {hop.addr}  {hop.rtt:.3f} ms")
+            else:
+                print(f"{hop_num:2}  *")
+
+outfile.close()
